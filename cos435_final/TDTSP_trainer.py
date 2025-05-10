@@ -89,12 +89,6 @@ def tsp_solver_dynamic_programming(travel_tensor, destinations):
 def tsp_heuristic_sim_annealing(travel_tensor, destinations):
     tensor = travel_tensor[:,:,:60].mean(axis=2).copy()
     keep = destinations.astype(bool)
-    node_indices = np.where(keep)[0]
-
-    if len(node_indices) <= 1:
-        # Return trivial route and 0 distance
-        return node_indices, 0.0
-
     distance_matrix = tensor[keep][:, keep]
     permutation, distance = solve_tsp_simulated_annealing(distance_matrix, max_processing_time=180)
     route = np.where(destinations == 1)[0][permutation]
@@ -208,14 +202,6 @@ if __name__ == '__main__':
     with open(f"{savefile_name}_heuristic_stats.txt", 'a') as f:
         f.write(f'NN: {total_time}\n')
 
-    distances = []
-    for destinations in destination_set:
-        permutation, distance = tsp_heuristic_sim_annealing(travel_tensor, destinations)
-        distances.append(evaluate_tsp_solver(permutation, poly_matrix))
-
-    with open(f"{savefile_name}_heuristic_stats.txt", 'a') as f:
-        f.write(f'sim_annealing_TSP_Heuristic: {np.mean(distances)}\n')
-
     benchmark_average_travel_times = []
     benchmark_average_rewards = []
 
@@ -230,5 +216,5 @@ if __name__ == '__main__':
         benchmark_average_rewards.append(average_reward)
 
         model.save(savefile_name)
-        rows = [[i, time, avg_reward] for i, time, avg_reward in enumerate(zip(benchmark_average_travel_times, benchmark_average_rewards))]
+        rows = [[i, time, avg_reward] for i, (time, avg_reward) in enumerate(zip(benchmark_average_travel_times, benchmark_average_rewards))]
         pd.DataFrame(rows, columns=['step', 'average_time', 'average_reward']).to_csv(f'{savefile_name}.csv')
