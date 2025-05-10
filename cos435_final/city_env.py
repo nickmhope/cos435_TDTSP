@@ -48,15 +48,15 @@ class CityEnv(gymnasium.Env):
   def step(self, action):
     reward = 0.0
     if self.current_node == action:
-        reward -= 5.0
+        reward -= 1.0
 
     travel_time = self.poly_matrix[self.current_node, action].eval(self.current_time % self.time_horizon)
     self.current_time += travel_time
 
     if self.destinations[action] > 0:
-        reward += self.N
+        reward += 1.0
         if self.destinations.sum() == 1:
-            reward += 10 * self.N
+            reward += self.N
     self.destinations[action] = 0  # Mark destination as visited
 
     self.current_vertex = action # Move to current vertex
