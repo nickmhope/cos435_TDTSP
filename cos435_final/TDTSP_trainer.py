@@ -47,7 +47,6 @@ def tsp_solver_dynamic_programming(travel_tensor, destinations):
     route = np.where(destinations == 1)[0][permutation]
     return route, distance
 
-
 def tsp_heuristic_sim_annealing(travel_tensor, destinations):
     tensor = travel_tensor[:,:,:60].mean(axis=2).copy()
     keep = destinations.astype(bool)
