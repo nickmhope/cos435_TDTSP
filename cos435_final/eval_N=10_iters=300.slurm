@@ -2,7 +2,7 @@
 #SBATCH --job-name=eval_N=10_iters=300   # create a short name for your job
 #SBATCH --nodes=1                # node count
 #SBATCH --ntasks=1               # total number of tasks across all nodes
-#SBATCH --cpus-per-task=32        # cpu-cores per task (>1 if multi-threaded tasks)
+#SBATCH --cpus-per-task=16        # cpu-cores per task (>1 if multi-threaded tasks)
 #SBATCH --mem-per-cpu=1G         # memory per cpu-core (4G is default)
 #SBATCH --time=24:00:00          # total run time limit (HH:MM:SS)
 #SBATCH --mail-type=begin        # send email when job begins
