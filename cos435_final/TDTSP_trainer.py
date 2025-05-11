@@ -38,7 +38,6 @@ def eval_func(model):
     return total_time, avg_reward
 
 if __name__ == '__main__':
-    # Environment parameters
     CLI=argparse.ArgumentParser()
     CLI.add_argument(
         "N",
@@ -68,7 +67,6 @@ if __name__ == '__main__':
     benchmark_size = args.benchmark_size
     NUM_ENVIRONMENTS = 50
 
-    # Initialize environment
     T = 24
     poly_matrix = create_poly_matrix(N, T)
 
@@ -83,7 +81,6 @@ if __name__ == '__main__':
     start_time_set = np.random.uniform(low = 0, high = 24, size = benchmark_size)
     savefile_name = f'evaluations/PPO_N={N}_iters={num_iters}'
 
-    # create and save model
     model = PPO("MlpPolicy", env, verbose=0)
     model.save(savefile_name)
 

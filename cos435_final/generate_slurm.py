@@ -1,3 +1,5 @@
+# creates slurm scripts to run in adroit
+
 def generate_slurm_script(N, num_iters, train_steps, benchmark_size):
     filename = f"eval_N={N}_iters={num_iters}.slurm"
     content = f"""#!/bin/bash
