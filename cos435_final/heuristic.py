@@ -1,8 +1,6 @@
 
 from poly_matrix import polynomial, create_poly_matrix
 import numpy as np
-from python_tsp.exact import solve_tsp_dynamic_programming
-from python_tsp.heuristics import solve_tsp_simulated_annealing
 
 def discretize_poly_matrix(poly_matrix, N, n_intervals):
     disc_matrix = np.zeros((N, N, n_intervals))
@@ -12,22 +10,6 @@ def discretize_poly_matrix(poly_matrix, N, n_intervals):
                 t = k*24/n_intervals
                 disc_matrix[i, j, t] = poly_matrix[i, j].eval(t)
     return disc_matrix 
-
-def tsp_solver_dynamic_programming(travel_tensor, destinations, k):
-    tensor = travel_tensor[:,:,:k].mean(axis=2).copy()
-    keep = destinations.astype(bool)
-    distance_matrix = tensor[keep][:, keep]
-    permutation, distance = solve_tsp_dynamic_programming(distance_matrix)
-    route = np.where(destinations == 1)[0][permutation]
-    return route, distance
-
-def tsp_heuristic_sim_annealing(travel_tensor, destinations, k):
-    tensor = travel_tensor[:,:,:k].mean(axis=2).copy()
-    keep = destinations.astype(bool)
-    distance_matrix = tensor[keep][:, keep]
-    permutation, distance = solve_tsp_simulated_annealing(distance_matrix, max_processing_time=10)
-    route = np.where(destinations == 1)[0][permutation]
-    return route, distance
 
 def verify_path(path, destinations):
     visit_nodes = {}
@@ -71,16 +53,6 @@ def test_nearest_neighbors(poly_matrix, start_times, start_nodes, destination_se
         verify_path(path, dests)
         times.append(evaluate_path(path, poly_matrix, t, i))
     return np.mean(times), times
-
-
-def test_dynamic_programming_tsp(poly_matrix, start_times, start_nodes, destination_set):
-    times = []
-    for t, i, dests in zip(start_times, start_nodes, destination_set):
-        path = tsp_solver_dynamic_programming(poly_matrix, t, i, dests)
-        assert(verify_path(path, dests))
-        times.append(evaluate_path(path, poly_matrix, t, i))
-    return np.mean(times), times
-
 
 if __name__ == '__main__':
     poly_matrix = create_poly_matrix(N=20, time_horizon=24)
