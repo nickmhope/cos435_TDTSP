@@ -95,19 +95,6 @@ if __name__ == '__main__':
         pickle.dump(start_time_set, f)
     with open(f"{savefile_name}_poly_matrix.pkl", "wb") as f:
         pickle.dump(poly_matrix, f)
-    with open(f"{savefile_name}_heuristic_stats.txt", 'w') as f:
-        f.write('Heuristics:\n')
-
-    travel_tensor = discretize_poly_matrix(poly_matrix, N)
-    total_time = 0
-    for destinations in destination_set:
-        visit_nodes = np.where(destinations == 1)[0]
-        visit_nodes = visit_nodes.tolist()
-        start_node = 0
-        path, travel_time = nearest_neighbors_with_time(travel_tensor, start_node, visit_nodes)
-        total_time += travel_time
-    with open(f"{savefile_name}_heuristic_stats.txt", 'a') as f:
-        f.write(f'NN: {total_time}\n')
 
     benchmark_average_travel_times = []
     benchmark_average_rewards = []
